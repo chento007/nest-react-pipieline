@@ -1,0 +1,40 @@
+version: "3.8"
+services:
+
+  postgres-svc:
+    image: postgres:12
+    restart: always
+    container_name: postgres-container
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+    # volumes:
+    #   - ./data:/var/lib/postgresql/data
+    #   - ./public.sql:/docker-entrypoint-initdb.d/dump.sql
+
+  api-svc:
+    image: api-image
+    container_name: api-container
+    restart: always
+    build: 
+      context: ./apps/api
+      dockerfile: Dockerfile
+    ports:
+      - "8082:80"
+    depends_on:
+      - postgres-svc
+
+  client-svc:
+    image: client-image
+    container_name: client-container
+    restart: always
+    build: 
+      context: ./apps/client
+      dockerfile: Dockerfile
+    ports:
+      - "8083:80"
+
+    depends_on:
+      - api-svc
