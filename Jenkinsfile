@@ -37,10 +37,11 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'gitlap-token', passwordVariable: 'registery_password', usernameVariable: 'registery_username')]) {
                     
                     sh "echo ${registery_username}"
-                    sh "docker login --username ${registery_username} --password ${registery_password}"
+                    sh "docker login --username chentochea --password ${registery_password}"
                     
                     sh "docker push ${env.API_IMAGE}"
                     sh "docker push ${env.CLIENT_IMAGE}"
+
                     sh "docker rmi ${env.API_IMAGE}"
                     sh "docker rmi ${env.CLIENT_IMAGE}"
                 }
