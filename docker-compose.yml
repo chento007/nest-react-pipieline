@@ -18,7 +18,7 @@ services:
 
   api-svc:
 
-    image: chentobank/api-image:v1
+    image: chentochea/api-image:v1
     container_name: api-container
     restart: always
     # build: 
@@ -37,7 +37,7 @@ services:
 
   client-svc:
 
-    image: chentobank/client-image:v1
+    image: chentochea/client-image:v1
     container_name: client-container
     restart: always
     # build: 
