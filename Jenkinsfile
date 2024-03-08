@@ -14,8 +14,8 @@ pipeline {
         stage('Preparation') {
             steps {
                 script {
-                    env.API_IMAGE = "chentobank/api-image:" + sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
-                    env.CLIENT_IMAGE = "chentobank/client-image:" + sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
+                    env.API_IMAGE = "chentochea/api-image:" + sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
+                    env.CLIENT_IMAGE = "chentochea/client-image:" + sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
                 }
             }
         }
