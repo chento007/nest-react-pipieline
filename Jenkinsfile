@@ -24,7 +24,7 @@ pipeline {
         }
 
         // push image to docker hub
-        step("Push image to Docker Hub"){
+        step("Push image to Docker Hub then remove image from local"){
             steps {
 
                 withCredentials([usernamePassword(credentialsId: 'gitlap-token', passwordVariable: 'registery_password', usernameVariable: 'registery_username')]) {
@@ -33,16 +33,17 @@ pipeline {
 
                     stage('Back-end') {
                         steps {
-                            sh 'docker push chentobank/api-image:$(git rev-parse --short HEAD) '
+                            sh 'docker push chentobank/api-image:$(git rev-parse --short HEAD)'
+                            sh 'docker rmi chentobank/api-image:$(git rev-parse --short HEAD)'
                         }
                     }
 
                     stage('Front-end') {
                         steps {
                             sh 'docker push chentobank/client-image:$(git rev-parse --short HEAD) '
+                            sh 'docker rmi chentobank/client-image:$(git rev-parse --short HEAD)'
                         }
                     }
-
                     sh 'docker logout'
                 }
             }

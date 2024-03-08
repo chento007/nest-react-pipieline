@@ -21,9 +21,9 @@ services:
     image: chentobank/api-image:v1
     container_name: api-container
     restart: always
-    build: 
-      context: ./apps/api
-      dockerfile: Dockerfile
+    # build: 
+    #   context: ./apps/api
+    #   dockerfile: Dockerfile
     ports:
       - "8082:3000"
     depends_on:
@@ -40,9 +40,9 @@ services:
     image: chentobank/client-image:v1
     container_name: client-container
     restart: always
-    build: 
-      context: ./apps/client
-      dockerfile: Dockerfile
+    # build: 
+    #   context: ./apps/client
+    #   dockerfile: Dockerfile
     ports:
       - "8083:8080"
     depends_on:
