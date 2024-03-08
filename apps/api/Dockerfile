@@ -1,19 +1,15 @@
-FROM node:16.18.1 as builder
+FROM node:16.10.0-alpine
 
 WORKDIR /app
 
-COPY package*.json ./
+ENV NODE_ENV development
 
-RUN npm i
+COPY package.json pnpm.lock ./
+
+RUN pnpm install
 
 COPY . .
 
-RUN npm run build
+EXPOSE 3000
 
-FROM nginx:latest
-
-COPY --from=builder /app/build /usr/share/nginx/html
-
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
+CMD [ "npm", "start:dev" ]
