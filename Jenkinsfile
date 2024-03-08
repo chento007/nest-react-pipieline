@@ -13,8 +13,8 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'gitlap-token', passwordVariable: 'registery_password', usernameVariable: 'registery_username')]) {
                     echo '==============build version============='
-                    sh 'docker password $passwordVariable'
-                    sh 'docker password $registery_username'
+                    sh 'echo $passwordVariable'
+                    sh 'echo password $registery_username'
                 }
             }
         }
