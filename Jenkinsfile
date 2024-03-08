@@ -11,7 +11,7 @@ pipeline {
 
         stage('Build Image Back end and backend') {
             steps {        
-                sh 'docker build -t chentochea/api-image:${(git rev-parse --short HEAD)} ./apps/api/'
+                sh 'docker build -t chentochea/api-image:$(git rev-parse --short HEAD) ./apps/api/'
                 sh 'docker build -t chentochea/client-image:$(git rev-parse --short HEAD) ./apps/client/'
                 sh 'docker images -a'
             }     
