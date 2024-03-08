@@ -18,11 +18,9 @@ RUN npm run build
 # Stage 2: Serve the app with Nginx
 FROM nginx:alpine
 
-# Copy the build output to replace the default nginx contents.
-COPY --from=builder /app/dist /usr/share/nginx/html
+# If your build directory is `build` instead of `dist`, adjust the COPY command accordingly
+COPY --from=builder /app/build /usr/share/nginx/html
 
-# Expose port 80 to the Docker host, so we can access it from the outside.
 EXPOSE 80
 
-# Start Nginx when the container has provisioned.
 CMD ["nginx", "-g", "daemon off;"]
