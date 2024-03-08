@@ -37,7 +37,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'registery_password', usernameVariable: 'registery_username')]) {
                     
                     sh "echo ${registery_username}"
-                    sh "docker login --username chentochea --password ${registery_password}"
+                    sh "docker login --username chentochea --password ${registery_password} docker.io"
                     
                     sh "docker push ${env.API_IMAGE}"
                     sh "docker push ${env.CLIENT_IMAGE}"
