@@ -6,10 +6,19 @@ pipeline {
     }
 
     environment {
-        API_IMAGE = "chentobank/api-image:$(git  rev-parse --short HEAD)"
-        CLIENT_IMAGE = "chentobank/client-image:$(git rev-parse --short HEAD)"
+        API_IMAGE = ""
+        CLIENT_IMAGE = ""
     }
     stages  {
+
+        stage('Preparation') {
+            steps {
+                script {
+                    env.API_IMAGE = "chentobank/api-image:" + sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
+                    env.CLIENT_IMAGE = "chentobank/client-image:" + sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
+                }
+            }
+        }
 
         stage('Build Image Back end and backend') {
             steps {        
