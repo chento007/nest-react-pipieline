@@ -22,8 +22,9 @@ pipeline {
 
                 withCredentials([usernamePassword(credentialsId: 'gitlap-token', passwordVariable: 'registery_password', usernameVariable: 'registery_username')]) {
                     
+                    sh 'echo $registery_username'
                     sh 'docker login --username $registery_username --password $registery_password'
-
+                    
                     sh 'docker push chentobank/api-image:$(git rev-parse --short HEAD)'
                     sh 'docker push chentobank/client-image:$(git rev-parse --short HEAD) '
 
