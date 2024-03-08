@@ -7,21 +7,13 @@ pipeline {
 
     stages {
 
-        // build image
-        stage('Build Image') {
-            steps{
-                stage('Back-end') {
-                    steps {
-                        sh 'docker build -t chentobank/api-image:$(git rev-parse --short HEAD) ./apps/api/'
-                    }
-                }
-
-                stage('Front-end') {
-                    steps {
-                        sh 'docker build -t chentobank/client-image:$(git rev-parse --short HEAD) ./apps/api/'
-                    }
-                }                
-            }
+        stage('Build Image Back end and backend') {
+            steps {        
+                sh 'docker build -t chentobank/api-image:$(git rev-parse --short HEAD) ./apps/api/'
+            }   
+            steps {
+                sh 'docker build -t chentobank/client-image:$(git rev-parse --short HEAD) ./apps/api/'
+            }       
         }
 
         // push image to docker hub
@@ -32,20 +24,20 @@ pipeline {
                     
                     sh 'docker login --username $registery_username --password $registery_password'
 
-                    stage('Back-end') {
-                        steps {
-                            sh 'docker push chentobank/api-image:$(git rev-parse --short HEAD)'
-                            sh 'docker rmi chentobank/api-image:$(git rev-parse --short HEAD)'
-                        }
+                    steps {
+                        sh 'docker push chentobank/api-image:$(git rev-parse --short HEAD)'
+                        sh 'docker rmi chentobank/api-image:$(git rev-parse --short HEAD)'
+                    }
+                    
+
+                    steps {
+                        sh 'docker push chentobank/client-image:$(git rev-parse --short HEAD) '
+                        sh 'docker rmi chentobank/client-image:$(git rev-parse --short HEAD)'
                     }
 
-                    stage('Front-end') {
-                        steps {
-                            sh 'docker push chentobank/client-image:$(git rev-parse --short HEAD) '
-                            sh 'docker rmi chentobank/client-image:$(git rev-parse --short HEAD)'
-                        }
+                    steps{
+                        sh 'docker logout'
                     }
-                    sh 'docker logout'
                 }
             }
         }
