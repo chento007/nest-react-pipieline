@@ -41,11 +41,7 @@ pipeline {
         // deploy
         stage('Deploy application'){
             steps {
-                
-                withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'registery_password', usernameVariable: 'registery_username')]) {
-                    sh 'docker login --username \$registery_username --password \$registery_password docker.io'
-                    sh 'docker compose up -d --build'
-                }
+                sh 'docker compose up -d --build'
             }
         }
 
