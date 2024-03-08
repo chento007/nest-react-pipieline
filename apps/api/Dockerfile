@@ -6,7 +6,7 @@ ENV NODE_ENV development
 
 COPY package.json pnpm.lock ./
 
-RUN pnpm install
+RUN npm install
 
 COPY . .
 
