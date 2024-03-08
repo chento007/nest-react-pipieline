@@ -5,12 +5,16 @@ pipeline {
         nodejs 'node-16.18.1'
     }
 
+    environment {
+        API_IMAGE = "chentobank/api-image:$(git  rev-parse --short HEAD)"
+        CLIENT_IMAGE = "chentobank/client-image:$(git rev-parse --short HEAD)"
+    }
     stages  {
 
         stage('Build Image Back end and backend') {
             steps {        
-                sh 'docker build -t chentobank/api-image:$(git rev-parse --short HEAD) ./apps/api/'
-                sh 'docker build -t chentobank/client-image:$(git rev-parse --short HEAD) ./apps/api/'
+                sh 'docker build -t $API_IMAGE ./apps/api/'
+                sh 'docker build -t $CLIENT_IMAGE ./apps/api/'
             }     
         }
 
@@ -25,11 +29,11 @@ pipeline {
                     sh 'echo $registery_username'
                     sh 'docker login --username $registery_username --password $registery_password'
                     
-                    sh 'docker push chentobank/api-image:$(git rev-parse --short HEAD)'
-                    sh 'docker push chentobank/client-image:$(git rev-parse --short HEAD) '
+                    sh 'docker push $API_IMAGE'
+                    sh 'docker push $CLIENT_IMAGE '
 
-                    sh 'docker rmi chentobank/api-image:$(git rev-parse --short HEAD)'
-                    sh 'docker rmi chentobank/client-image:$(git rev-parse --short HEAD)'
+                    sh 'docker rmi $API_IMAGE'
+                    sh 'docker rmi $CLIENT_IMAGE'
                 }
             }
         }
