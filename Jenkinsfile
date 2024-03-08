@@ -7,24 +7,55 @@ pipeline {
 
     stages {
 
-
+        // build image
         stage('Build Image') {
 
+            stage('Back-end') {
+                steps {
+                    sh 'docker build -t chentobank/api-image:$(git rev-parse --short HEAD) ./apps/api/'
+                }
+            }
+
+            stage('Front-end') {
+                steps {
+                    sh 'docker build -t chentobank/client-image:$(git rev-parse --short HEAD) ./apps/api/'
+                }
+            }
+        }
+
+        // push image to docker hub
+        step("Push image to Docker Hub"){
             steps {
+
                 withCredentials([usernamePassword(credentialsId: 'gitlap-token', passwordVariable: 'registery_password', usernameVariable: 'registery_username')]) {
-                    echo '==============build version============='
-                    sh 'echo $registery_password'
-                    sh 'echo password $registery_username'
+                    
+                    sh 'docker login --username $registery_username --password $registery_password'
+
+                    stage('Back-end') {
+                        steps {
+                            sh 'docker push chentobank/api-image:$(git rev-parse --short HEAD) '
+                        }
+                    }
+
+                    stage('Front-end') {
+                        steps {
+                            sh 'docker push chentobank/client-image:$(git rev-parse --short HEAD) '
+                        }
+                    }
+
+                    sh 'docker logout'
                 }
             }
         }
 
 
-        // build image
-
-        // push image to docker hub
 
         // deploy
+        step("Deploy application"){
+            steps {
+                sh 'docker compose up -d --build'
+            }
+        }
 
         // post notification
     }
