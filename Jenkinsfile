@@ -22,8 +22,8 @@ pipeline {
 
         stage('Build Image Back end and backend') {
             steps {        
-                echo "${env.API_IMAGE}"
-                sh "docker build -t ${env.API_IMAGE} ./apps/api/"
+                echo "chentochea/api-image:$(git rev-parse --short HEAD)"
+                sh "docker build -t chentochea/api-image:$(git rev-parse --short HEAD) ./apps/api/"
                 sh "docker build -t ${env.CLIENT_IMAGE} ./apps/client/"
                 sh "docker images -a"
             }     
@@ -40,10 +40,10 @@ pipeline {
                     sh "echo ${registery_username}"
                     sh "docker login --username chentochea --password ${registery_password} docker.io"
                     
-                    sh "docker push ${env.API_IMAGE}"
+                    sh "docker push chentochea/api-image:$(git rev-parse --short HEAD)"
                     sh "docker push ${env.CLIENT_IMAGE}"
 
-                    sh "docker rmi ${env.API_IMAGE}"
+                    sh "docker rmi chentochea/api-image:$(git rev-parse --short HEAD)"
                     sh "docker rmi ${env.CLIENT_IMAGE}"
                 }
             }
