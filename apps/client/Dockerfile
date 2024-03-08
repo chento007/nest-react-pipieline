@@ -1,19 +1,20 @@
-FROM node:16.18.1 as builder
+# Fetching the minified node image on apline linux
+FROM node:16.18.1
 
-WORKDIR /app
+# Declaring env
+ENV NODE_ENV development
 
-COPY package*.json ./
+# Setting up the work directory
+WORKDIR /express-docker
 
-RUN npm i
-
+# Copying all the files in our project
 COPY . .
 
-RUN npm run build
+# Installing dependencies
+RUN npm install
 
-FROM nginx:latest
+# Starting our application
+CMD ["npm", "start"]
 
-COPY --from=builder /app/build /usr/share/nginx/html
-
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
+# Exposing server port
+EXPOSE 3000
