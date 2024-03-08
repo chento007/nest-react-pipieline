@@ -9,22 +9,23 @@ pipeline {
 
         // build image
         stage('Build Image') {
-
-            stage('Back-end') {
-                steps {
-                    sh 'docker build -t chentobank/api-image:$(git rev-parse --short HEAD) ./apps/api/'
+            steps{
+                stage('Back-end') {
+                    steps {
+                        sh 'docker build -t chentobank/api-image:$(git rev-parse --short HEAD) ./apps/api/'
+                    }
                 }
-            }
 
-            stage('Front-end') {
-                steps {
-                    sh 'docker build -t chentobank/client-image:$(git rev-parse --short HEAD) ./apps/api/'
-                }
+                stage('Front-end') {
+                    steps {
+                        sh 'docker build -t chentobank/client-image:$(git rev-parse --short HEAD) ./apps/api/'
+                    }
+                }                
             }
         }
 
         // push image to docker hub
-        step("Push image to Docker Hub then remove image from local"){
+        stage("Push image to Docker Hub then remove image from local"){
             steps {
 
                 withCredentials([usernamePassword(credentialsId: 'gitlap-token', passwordVariable: 'registery_password', usernameVariable: 'registery_username')]) {
@@ -52,7 +53,7 @@ pipeline {
 
 
         // deploy
-        step("Deploy application"){
+        stage("Deploy application"){
             steps {
                 sh 'docker compose up -d --build'
             }
