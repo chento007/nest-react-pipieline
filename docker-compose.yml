@@ -38,3 +38,5 @@ services:
 
     depends_on:
       - api-svc
+      - postgres-svc
+
