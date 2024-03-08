@@ -1,20 +1,27 @@
-# Fetching the minified node image on apline linux
-FROM node:16.18.1
+# Stage 1: Build the React application
+FROM node:16.18.1 AS builder
 
-# Declaring env
-ENV NODE_ENV development
+WORKDIR /app
 
-# Setting up the work directory
-WORKDIR /express-docker
+COPY package*.json ./
+COPY yarn.lock ./
 
-# Copying all the files in our project
+# Install dependencies
+RUN npm install
+# OR
+# RUN yarn install
+
 COPY . .
 
-# Installing dependencies
-RUN npm install
+RUN npm run build
+# OR
+# RUN yarn build
 
-# Starting our application
-CMD ["npm", "start"]
+# Stage 2: Serve the app with Nginx
+FROM nginx:alpine
 
-# Exposing server port
-EXPOSE 3000
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
