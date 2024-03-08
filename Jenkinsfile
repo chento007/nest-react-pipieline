@@ -25,6 +25,7 @@ pipeline {
                 echo "${env.API_IMAGE}"
                 sh "docker build -t ${env.API_IMAGE} ./apps/api/"
                 sh "docker build -t ${env.CLIENT_IMAGE} ./apps/client/"
+                sh "docker images -a"
             }     
         }
 
