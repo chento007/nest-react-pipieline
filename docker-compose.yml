@@ -2,7 +2,9 @@ version: "3.8"
 services:
 
   postgres-svc:
+
     image: postgres:12
+
     restart: always
     container_name: postgres-container
     ports:
@@ -15,7 +17,8 @@ services:
       - ./public.sql:/docker-entrypoint-initdb.d/dump.sql
 
   api-svc:
-    image: api-image
+
+    image: chentobank/api-image:v1
     container_name: api-container
     restart: always
     build: 
@@ -25,9 +28,16 @@ services:
       - "8082:3000"
     depends_on:
       - postgres-svc
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
   client-svc:
-    image: client-image
+
+    image: chentobank/client-image:v1
     container_name: client-container
     restart: always
     build: 
@@ -35,8 +45,13 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8083:8080"
-
     depends_on:
       - api-svc
       - postgres-svc
 
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s

@@ -6,11 +6,26 @@ pipeline {
     }
 
     stages {
+
+
         stage('Build Image') {
+
             steps {
-                echo '==============build version============='
-                sh 'docker-compose up -d --build'
+                withCredentials([usernamePassword(credentialsId: 'gitlap-token', passwordVariable: 'registery_password', usernameVariable: 'registery_username')]) {
+                    echo '==============build version============='
+                    sh 'docker password $passwordVariable'
+                    sh 'docker password $registery_username'
+                }
             }
         }
+
+
+        // build image
+
+        // push image to docker hub
+
+        // deploy
+
+        // post notification
     }
 }
