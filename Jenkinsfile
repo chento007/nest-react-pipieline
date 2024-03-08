@@ -23,7 +23,7 @@ pipeline {
         stage('Build Image Back end and backend') {
             steps {        
                 sh 'docker build -t $API_IMAGE ./apps/api/'
-                sh 'docker build -t $CLIENT_IMAGE ./apps/api/'
+                sh 'docker build -t $CLIENT_IMAGE ./apps/client/'
             }     
         }
 
