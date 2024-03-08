@@ -34,7 +34,7 @@ pipeline {
         stage("Push image to Docker Hub"){
             steps {
 
-                withCredentials([usernamePassword(credentialsId: 'gitlap-token', passwordVariable: 'registery_password', usernameVariable: 'registery_username')]) {
+                withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'registery_password', usernameVariable: 'registery_username')]) {
                     
                     sh "echo ${registery_username}"
                     sh "docker login --username chentochea --password ${registery_password}"
